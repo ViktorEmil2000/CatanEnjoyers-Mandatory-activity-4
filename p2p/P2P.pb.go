@@ -2,9 +2,9 @@
 // versions:
 // 	protoc-gen-go v1.35.1
 // 	protoc        v3.12.4
-// source: P2P/P2P.proto
+// source: p2p/P2P.proto
 
-package proto
+package p2p
 
 import (
 	protoreflect "google.golang.org/protobuf/reflect/protoreflect"
@@ -20,30 +20,30 @@ const (
 	_ = protoimpl.EnforceVersion(protoimpl.MaxVersion - 20)
 )
 
-type BootClient struct {
+type FromClient struct {
 	state         protoimpl.MessageState
 	sizeCache     protoimpl.SizeCache
 	unknownFields protoimpl.UnknownFields
 
-	Id   string `protobuf:"bytes,1,opt,name=id,proto3" json:"id,omitempty"`
-	Port string `protobuf:"bytes,2,opt,name=port,proto3" json:"port,omitempty"`
+	Id      string `protobuf:"bytes,1,opt,name=id,proto3" json:"id,omitempty"`
+	Requets string `protobuf:"bytes,2,opt,name=requets,proto3" json:"requets,omitempty"`
 }
 
-func (x *BootClient) Reset() {
-	*x = BootClient{}
-	mi := &file_P2P_P2P_proto_msgTypes[0]
+func (x *FromClient) Reset() {
+	*x = FromClient{}
+	mi := &file_p2p_P2P_proto_msgTypes[0]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
 
-func (x *BootClient) String() string {
+func (x *FromClient) String() string {
 	return protoimpl.X.MessageStringOf(x)
 }
 
-func (*BootClient) ProtoMessage() {}
+func (*FromClient) ProtoMessage() {}
 
-func (x *BootClient) ProtoReflect() protoreflect.Message {
-	mi := &file_P2P_P2P_proto_msgTypes[0]
+func (x *FromClient) ProtoReflect() protoreflect.Message {
+	mi := &file_p2p_P2P_proto_msgTypes[0]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -54,49 +54,49 @@ func (x *BootClient) ProtoReflect() protoreflect.Message {
 	return mi.MessageOf(x)
 }
 
-// Deprecated: Use BootClient.ProtoReflect.Descriptor instead.
-func (*BootClient) Descriptor() ([]byte, []int) {
-	return file_P2P_P2P_proto_rawDescGZIP(), []int{0}
+// Deprecated: Use FromClient.ProtoReflect.Descriptor instead.
+func (*FromClient) Descriptor() ([]byte, []int) {
+	return file_p2p_P2P_proto_rawDescGZIP(), []int{0}
 }
 
-func (x *BootClient) GetId() string {
+func (x *FromClient) GetId() string {
 	if x != nil {
 		return x.Id
 	}
 	return ""
 }
 
-func (x *BootClient) GetPort() string {
+func (x *FromClient) GetRequets() string {
 	if x != nil {
-		return x.Port
+		return x.Requets
 	}
 	return ""
 }
 
-type BootServer struct {
+type FromServer struct {
 	state         protoimpl.MessageState
 	sizeCache     protoimpl.SizeCache
 	unknownFields protoimpl.UnknownFields
 
-	Id   string `protobuf:"bytes,1,opt,name=id,proto3" json:"id,omitempty"`
-	Port string `protobuf:"bytes,2,opt,name=port,proto3" json:"port,omitempty"`
+	Id         int32 `protobuf:"varint,1,opt,name=id,proto3" json:"id,omitempty"`
+	Permission bool  `protobuf:"varint,2,opt,name=permission,proto3" json:"permission,omitempty"`
 }
 
-func (x *BootServer) Reset() {
-	*x = BootServer{}
-	mi := &file_P2P_P2P_proto_msgTypes[1]
+func (x *FromServer) Reset() {
+	*x = FromServer{}
+	mi := &file_p2p_P2P_proto_msgTypes[1]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
 
-func (x *BootServer) String() string {
+func (x *FromServer) String() string {
 	return protoimpl.X.MessageStringOf(x)
 }
 
-func (*BootServer) ProtoMessage() {}
+func (*FromServer) ProtoMessage() {}
 
-func (x *BootServer) ProtoReflect() protoreflect.Message {
-	mi := &file_P2P_P2P_proto_msgTypes[1]
+func (x *FromServer) ProtoReflect() protoreflect.Message {
+	mi := &file_p2p_P2P_proto_msgTypes[1]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -107,63 +107,68 @@ func (x *BootServer) ProtoReflect() protoreflect.Message {
 	return mi.MessageOf(x)
 }
 
-// Deprecated: Use BootServer.ProtoReflect.Descriptor instead.
-func (*BootServer) Descriptor() ([]byte, []int) {
-	return file_P2P_P2P_proto_rawDescGZIP(), []int{1}
+// Deprecated: Use FromServer.ProtoReflect.Descriptor instead.
+func (*FromServer) Descriptor() ([]byte, []int) {
+	return file_p2p_P2P_proto_rawDescGZIP(), []int{1}
 }
 
-func (x *BootServer) GetId() string {
+func (x *FromServer) GetId() int32 {
 	if x != nil {
 		return x.Id
 	}
-	return ""
+	return 0
 }
 
-func (x *BootServer) GetPort() string {
+func (x *FromServer) GetPermission() bool {
 	if x != nil {
-		return x.Port
+		return x.Permission
 	}
-	return ""
+	return false
 }
 
-var File_P2P_P2P_proto protoreflect.FileDescriptor
+var File_p2p_P2P_proto protoreflect.FileDescriptor
 
-var file_P2P_P2P_proto_rawDesc = []byte{
-	0x0a, 0x0d, 0x50, 0x32, 0x50, 0x2f, 0x50, 0x32, 0x50, 0x2e, 0x70, 0x72, 0x6f, 0x74, 0x6f, 0x12,
-	0x03, 0x50, 0x32, 0x50, 0x22, 0x30, 0x0a, 0x0a, 0x42, 0x6f, 0x6f, 0x74, 0x43, 0x6c, 0x69, 0x65,
+var file_p2p_P2P_proto_rawDesc = []byte{
+	0x0a, 0x0d, 0x70, 0x32, 0x70, 0x2f, 0x50, 0x32, 0x50, 0x2e, 0x70, 0x72, 0x6f, 0x74, 0x6f, 0x12,
+	0x03, 0x50, 0x32, 0x50, 0x22, 0x36, 0x0a, 0x0a, 0x46, 0x72, 0x6f, 0x6d, 0x43, 0x6c, 0x69, 0x65,
 	0x6e, 0x74, 0x12, 0x0e, 0x0a, 0x02, 0x69, 0x64, 0x18, 0x01, 0x20, 0x01, 0x28, 0x09, 0x52, 0x02,
-	0x69, 0x64, 0x12, 0x12, 0x0a, 0x04, 0x70, 0x6f, 0x72, 0x74, 0x18, 0x02, 0x20, 0x01, 0x28, 0x09,
-	0x52, 0x04, 0x70, 0x6f, 0x72, 0x74, 0x22, 0x30, 0x0a, 0x0a, 0x42, 0x6f, 0x6f, 0x74, 0x53, 0x65,
-	0x72, 0x76, 0x65, 0x72, 0x12, 0x0e, 0x0a, 0x02, 0x69, 0x64, 0x18, 0x01, 0x20, 0x01, 0x28, 0x09,
-	0x52, 0x02, 0x69, 0x64, 0x12, 0x12, 0x0a, 0x04, 0x70, 0x6f, 0x72, 0x74, 0x18, 0x02, 0x20, 0x01,
-	0x28, 0x09, 0x52, 0x04, 0x70, 0x6f, 0x72, 0x74, 0x32, 0x41, 0x0a, 0x03, 0x50, 0x32, 0x50, 0x12,
-	0x3a, 0x0a, 0x10, 0x42, 0x6f, 0x6f, 0x74, 0x73, 0x74, 0x72, 0x61, 0x70, 0x43, 0x6f, 0x6e, 0x6e,
-	0x65, 0x63, 0x74, 0x12, 0x0f, 0x2e, 0x50, 0x32, 0x50, 0x2e, 0x42, 0x6f, 0x6f, 0x74, 0x43, 0x6c,
-	0x69, 0x65, 0x6e, 0x74, 0x1a, 0x0f, 0x2e, 0x50, 0x32, 0x50, 0x2e, 0x42, 0x6f, 0x6f, 0x74, 0x53,
-	0x65, 0x72, 0x76, 0x65, 0x72, 0x22, 0x00, 0x28, 0x01, 0x30, 0x01, 0x42, 0x09, 0x5a, 0x07, 0x2e,
-	0x2f, 0x70, 0x72, 0x6f, 0x74, 0x6f, 0x62, 0x06, 0x70, 0x72, 0x6f, 0x74, 0x6f, 0x33,
+	0x69, 0x64, 0x12, 0x18, 0x0a, 0x07, 0x72, 0x65, 0x71, 0x75, 0x65, 0x74, 0x73, 0x18, 0x02, 0x20,
+	0x01, 0x28, 0x09, 0x52, 0x07, 0x72, 0x65, 0x71, 0x75, 0x65, 0x74, 0x73, 0x22, 0x3c, 0x0a, 0x0a,
+	0x46, 0x72, 0x6f, 0x6d, 0x53, 0x65, 0x72, 0x76, 0x65, 0x72, 0x12, 0x0e, 0x0a, 0x02, 0x69, 0x64,
+	0x18, 0x01, 0x20, 0x01, 0x28, 0x05, 0x52, 0x02, 0x69, 0x64, 0x12, 0x1e, 0x0a, 0x0a, 0x70, 0x65,
+	0x72, 0x6d, 0x69, 0x73, 0x73, 0x69, 0x6f, 0x6e, 0x18, 0x02, 0x20, 0x01, 0x28, 0x08, 0x52, 0x0a,
+	0x70, 0x65, 0x72, 0x6d, 0x69, 0x73, 0x73, 0x69, 0x6f, 0x6e, 0x32, 0x3f, 0x0a, 0x04, 0x42, 0x6f,
+	0x6f, 0x74, 0x12, 0x37, 0x0a, 0x0d, 0x43, 0x6c, 0x69, 0x65, 0x6e, 0x74, 0x43, 0x6f, 0x6e, 0x6e,
+	0x65, 0x63, 0x74, 0x12, 0x0f, 0x2e, 0x50, 0x32, 0x50, 0x2e, 0x46, 0x72, 0x6f, 0x6d, 0x43, 0x6c,
+	0x69, 0x65, 0x6e, 0x74, 0x1a, 0x0f, 0x2e, 0x50, 0x32, 0x50, 0x2e, 0x46, 0x72, 0x6f, 0x6d, 0x53,
+	0x65, 0x72, 0x76, 0x65, 0x72, 0x22, 0x00, 0x28, 0x01, 0x30, 0x01, 0x42, 0x42, 0x5a, 0x40, 0x67,
+	0x69, 0x74, 0x68, 0x75, 0x62, 0x2e, 0x63, 0x6f, 0x6d, 0x2f, 0x56, 0x69, 0x6b, 0x74, 0x6f, 0x72,
+	0x45, 0x6d, 0x69, 0x6c, 0x32, 0x30, 0x30, 0x30, 0x2f, 0x43, 0x61, 0x74, 0x61, 0x6e, 0x45, 0x6e,
+	0x6a, 0x6f, 0x79, 0x65, 0x72, 0x73, 0x2d, 0x4d, 0x61, 0x6e, 0x64, 0x61, 0x74, 0x6f, 0x72, 0x79,
+	0x2d, 0x61, 0x63, 0x74, 0x69, 0x76, 0x69, 0x74, 0x79, 0x2d, 0x34, 0x2f, 0x70, 0x32, 0x70, 0x62,
+	0x06, 0x70, 0x72, 0x6f, 0x74, 0x6f, 0x33,
 }
 
 var (
-	file_P2P_P2P_proto_rawDescOnce sync.Once
-	file_P2P_P2P_proto_rawDescData = file_P2P_P2P_proto_rawDesc
+	file_p2p_P2P_proto_rawDescOnce sync.Once
+	file_p2p_P2P_proto_rawDescData = file_p2p_P2P_proto_rawDesc
 )
 
-func file_P2P_P2P_proto_rawDescGZIP() []byte {
-	file_P2P_P2P_proto_rawDescOnce.Do(func() {
-		file_P2P_P2P_proto_rawDescData = protoimpl.X.CompressGZIP(file_P2P_P2P_proto_rawDescData)
+func file_p2p_P2P_proto_rawDescGZIP() []byte {
+	file_p2p_P2P_proto_rawDescOnce.Do(func() {
+		file_p2p_P2P_proto_rawDescData = protoimpl.X.CompressGZIP(file_p2p_P2P_proto_rawDescData)
 	})
-	return file_P2P_P2P_proto_rawDescData
+	return file_p2p_P2P_proto_rawDescData
 }
 
-var file_P2P_P2P_proto_msgTypes = make([]protoimpl.MessageInfo, 2)
-var file_P2P_P2P_proto_goTypes = []any{
-	(*BootClient)(nil), // 0: P2P.BootClient
-	(*BootServer)(nil), // 1: P2P.BootServer
+var file_p2p_P2P_proto_msgTypes = make([]protoimpl.MessageInfo, 2)
+var file_p2p_P2P_proto_goTypes = []any{
+	(*FromClient)(nil), // 0: P2P.FromClient
+	(*FromServer)(nil), // 1: P2P.FromServer
 }
-var file_P2P_P2P_proto_depIdxs = []int32{
-	0, // 0: P2P.P2P.BootstrapConnect:input_type -> P2P.BootClient
-	1, // 1: P2P.P2P.BootstrapConnect:output_type -> P2P.BootServer
+var file_p2p_P2P_proto_depIdxs = []int32{
+	0, // 0: P2P.Boot.ClientConnect:input_type -> P2P.FromClient
+	1, // 1: P2P.Boot.ClientConnect:output_type -> P2P.FromServer
 	1, // [1:2] is the sub-list for method output_type
 	0, // [0:1] is the sub-list for method input_type
 	0, // [0:0] is the sub-list for extension type_name
@@ -171,27 +176,27 @@ var file_P2P_P2P_proto_depIdxs = []int32{
 	0, // [0:0] is the sub-list for field type_name
 }
 
-func init() { file_P2P_P2P_proto_init() }
-func file_P2P_P2P_proto_init() {
-	if File_P2P_P2P_proto != nil {
+func init() { file_p2p_P2P_proto_init() }
+func file_p2p_P2P_proto_init() {
+	if File_p2p_P2P_proto != nil {
 		return
 	}
 	type x struct{}
 	out := protoimpl.TypeBuilder{
 		File: protoimpl.DescBuilder{
 			GoPackagePath: reflect.TypeOf(x{}).PkgPath(),
-			RawDescriptor: file_P2P_P2P_proto_rawDesc,
+			RawDescriptor: file_p2p_P2P_proto_rawDesc,
 			NumEnums:      0,
 			NumMessages:   2,
 			NumExtensions: 0,
 			NumServices:   1,
 		},
-		GoTypes:           file_P2P_P2P_proto_goTypes,
-		DependencyIndexes: file_P2P_P2P_proto_depIdxs,
-		MessageInfos:      file_P2P_P2P_proto_msgTypes,
+		GoTypes:           file_p2p_P2P_proto_goTypes,
+		DependencyIndexes: file_p2p_P2P_proto_depIdxs,
+		MessageInfos:      file_p2p_P2P_proto_msgTypes,
 	}.Build()
-	File_P2P_P2P_proto = out.File
-	file_P2P_P2P_proto_rawDesc = nil
-	file_P2P_P2P_proto_goTypes = nil
-	file_P2P_P2P_proto_depIdxs = nil
+	File_p2p_P2P_proto = out.File
+	file_p2p_P2P_proto_rawDesc = nil
+	file_p2p_P2P_proto_goTypes = nil
+	file_p2p_P2P_proto_depIdxs = nil
 }

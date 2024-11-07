@@ -2,9 +2,9 @@
 // versions:
 // - protoc-gen-go-grpc v1.5.1
 // - protoc             v3.12.4
-// source: P2P/P2P.proto
+// source: p2p/P2P.proto
 
-package proto
+package p2p
 
 import (
 	context "context"
@@ -19,97 +19,97 @@ import (
 const _ = grpc.SupportPackageIsVersion9
 
 const (
-	P2P_BootstrapConnect_FullMethodName = "/P2P.P2P/BootstrapConnect"
+	Boot_ClientConnect_FullMethodName = "/P2P.Boot/ClientConnect"
 )
 
-// P2PClient is the client API for P2P service.
+// BootClient is the client API for Boot service.
 //
 // For semantics around ctx use and closing/ending streaming RPCs, please refer to https://pkg.go.dev/google.golang.org/grpc/?tab=doc#ClientConn.NewStream.
-type P2PClient interface {
-	BootstrapConnect(ctx context.Context, opts ...grpc.CallOption) (grpc.BidiStreamingClient[BootClient, BootServer], error)
+type BootClient interface {
+	ClientConnect(ctx context.Context, opts ...grpc.CallOption) (grpc.BidiStreamingClient[FromClient, FromServer], error)
 }
 
-type p2PClient struct {
+type bootClient struct {
 	cc grpc.ClientConnInterface
 }
 
-func NewP2PClient(cc grpc.ClientConnInterface) P2PClient {
-	return &p2PClient{cc}
+func NewBootClient(cc grpc.ClientConnInterface) BootClient {
+	return &bootClient{cc}
 }
 
-func (c *p2PClient) BootstrapConnect(ctx context.Context, opts ...grpc.CallOption) (grpc.BidiStreamingClient[BootClient, BootServer], error) {
+func (c *bootClient) ClientConnect(ctx context.Context, opts ...grpc.CallOption) (grpc.BidiStreamingClient[FromClient, FromServer], error) {
 	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
-	stream, err := c.cc.NewStream(ctx, &P2P_ServiceDesc.Streams[0], P2P_BootstrapConnect_FullMethodName, cOpts...)
+	stream, err := c.cc.NewStream(ctx, &Boot_ServiceDesc.Streams[0], Boot_ClientConnect_FullMethodName, cOpts...)
 	if err != nil {
 		return nil, err
 	}
-	x := &grpc.GenericClientStream[BootClient, BootServer]{ClientStream: stream}
+	x := &grpc.GenericClientStream[FromClient, FromServer]{ClientStream: stream}
 	return x, nil
 }
 
 // This type alias is provided for backwards compatibility with existing code that references the prior non-generic stream type by name.
-type P2P_BootstrapConnectClient = grpc.BidiStreamingClient[BootClient, BootServer]
+type Boot_ClientConnectClient = grpc.BidiStreamingClient[FromClient, FromServer]
 
-// P2PServer is the server API for P2P service.
-// All implementations must embed UnimplementedP2PServer
+// BootServer is the server API for Boot service.
+// All implementations must embed UnimplementedBootServer
 // for forward compatibility.
-type P2PServer interface {
-	BootstrapConnect(grpc.BidiStreamingServer[BootClient, BootServer]) error
-	mustEmbedUnimplementedP2PServer()
+type BootServer interface {
+	ClientConnect(grpc.BidiStreamingServer[FromClient, FromServer]) error
+	mustEmbedUnimplementedBootServer()
 }
 
-// UnimplementedP2PServer must be embedded to have
+// UnimplementedBootServer must be embedded to have
 // forward compatible implementations.
 //
 // NOTE: this should be embedded by value instead of pointer to avoid a nil
 // pointer dereference when methods are called.
-type UnimplementedP2PServer struct{}
+type UnimplementedBootServer struct{}
 
-func (UnimplementedP2PServer) BootstrapConnect(grpc.BidiStreamingServer[BootClient, BootServer]) error {
-	return status.Errorf(codes.Unimplemented, "method BootstrapConnect not implemented")
+func (UnimplementedBootServer) ClientConnect(grpc.BidiStreamingServer[FromClient, FromServer]) error {
+	return status.Errorf(codes.Unimplemented, "method ClientConnect not implemented")
 }
-func (UnimplementedP2PServer) mustEmbedUnimplementedP2PServer() {}
-func (UnimplementedP2PServer) testEmbeddedByValue()             {}
+func (UnimplementedBootServer) mustEmbedUnimplementedBootServer() {}
+func (UnimplementedBootServer) testEmbeddedByValue()              {}
 
-// UnsafeP2PServer may be embedded to opt out of forward compatibility for this service.
-// Use of this interface is not recommended, as added methods to P2PServer will
+// UnsafeBootServer may be embedded to opt out of forward compatibility for this service.
+// Use of this interface is not recommended, as added methods to BootServer will
 // result in compilation errors.
-type UnsafeP2PServer interface {
-	mustEmbedUnimplementedP2PServer()
+type UnsafeBootServer interface {
+	mustEmbedUnimplementedBootServer()
 }
 
-func RegisterP2PServer(s grpc.ServiceRegistrar, srv P2PServer) {
-	// If the following call pancis, it indicates UnimplementedP2PServer was
+func RegisterBootServer(s grpc.ServiceRegistrar, srv BootServer) {
+	// If the following call pancis, it indicates UnimplementedBootServer was
 	// embedded by pointer and is nil.  This will cause panics if an
 	// unimplemented method is ever invoked, so we test this at initialization
 	// time to prevent it from happening at runtime later due to I/O.
 	if t, ok := srv.(interface{ testEmbeddedByValue() }); ok {
 		t.testEmbeddedByValue()
 	}
-	s.RegisterService(&P2P_ServiceDesc, srv)
+	s.RegisterService(&Boot_ServiceDesc, srv)
 }
 
-func _P2P_BootstrapConnect_Handler(srv interface{}, stream grpc.ServerStream) error {
-	return srv.(P2PServer).BootstrapConnect(&grpc.GenericServerStream[BootClient, BootServer]{ServerStream: stream})
+func _Boot_ClientConnect_Handler(srv interface{}, stream grpc.ServerStream) error {
+	return srv.(BootServer).ClientConnect(&grpc.GenericServerStream[FromClient, FromServer]{ServerStream: stream})
 }
 
 // This type alias is provided for backwards compatibility with existing code that references the prior non-generic stream type by name.
-type P2P_BootstrapConnectServer = grpc.BidiStreamingServer[BootClient, BootServer]
+type Boot_ClientConnectServer = grpc.BidiStreamingServer[FromClient, FromServer]
 
-// P2P_ServiceDesc is the grpc.ServiceDesc for P2P service.
+// Boot_ServiceDesc is the grpc.ServiceDesc for Boot service.
 // It's only intended for direct use with grpc.RegisterService,
 // and not to be introspected or modified (even as a copy)
-var P2P_ServiceDesc = grpc.ServiceDesc{
-	ServiceName: "P2P.P2P",
-	HandlerType: (*P2PServer)(nil),
+var Boot_ServiceDesc = grpc.ServiceDesc{
+	ServiceName: "P2P.Boot",
+	HandlerType: (*BootServer)(nil),
 	Methods:     []grpc.MethodDesc{},
 	Streams: []grpc.StreamDesc{
 		{
-			StreamName:    "BootstrapConnect",
-			Handler:       _P2P_BootstrapConnect_Handler,
+			StreamName:    "ClientConnect",
+			Handler:       _Boot_ClientConnect_Handler,
 			ServerStreams: true,
 			ClientStreams: true,
 		},
 	},
-	Metadata: "P2P/P2P.proto",
+	Metadata: "p2p/P2P.proto",
 }
