@@ -19,27 +19,27 @@ import (
 const _ = grpc.SupportPackageIsVersion9
 
 const (
-	Boot_ClientConnect_FullMethodName = "/P2P.Boot/ClientConnect"
+	Client_ClientConnect_FullMethodName = "/P2P.client/ClientConnect"
 )
 
-// BootClient is the client API for Boot service.
+// ClientClient is the client API for Client service.
 //
 // For semantics around ctx use and closing/ending streaming RPCs, please refer to https://pkg.go.dev/google.golang.org/grpc/?tab=doc#ClientConn.NewStream.
-type BootClient interface {
+type ClientClient interface {
 	ClientConnect(ctx context.Context, opts ...grpc.CallOption) (grpc.BidiStreamingClient[FromClient, FromServer], error)
 }
 
-type bootClient struct {
+type clientClient struct {
 	cc grpc.ClientConnInterface
 }
 
-func NewBootClient(cc grpc.ClientConnInterface) BootClient {
-	return &bootClient{cc}
+func NewClientClient(cc grpc.ClientConnInterface) ClientClient {
+	return &clientClient{cc}
 }
 
-func (c *bootClient) ClientConnect(ctx context.Context, opts ...grpc.CallOption) (grpc.BidiStreamingClient[FromClient, FromServer], error) {
+func (c *clientClient) ClientConnect(ctx context.Context, opts ...grpc.CallOption) (grpc.BidiStreamingClient[FromClient, FromServer], error) {
 	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
-	stream, err := c.cc.NewStream(ctx, &Boot_ServiceDesc.Streams[0], Boot_ClientConnect_FullMethodName, cOpts...)
+	stream, err := c.cc.NewStream(ctx, &Client_ServiceDesc.Streams[0], Client_ClientConnect_FullMethodName, cOpts...)
 	if err != nil {
 		return nil, err
 	}
@@ -48,65 +48,65 @@ func (c *bootClient) ClientConnect(ctx context.Context, opts ...grpc.CallOption)
 }
 
 // This type alias is provided for backwards compatibility with existing code that references the prior non-generic stream type by name.
-type Boot_ClientConnectClient = grpc.BidiStreamingClient[FromClient, FromServer]
+type Client_ClientConnectClient = grpc.BidiStreamingClient[FromClient, FromServer]
 
-// BootServer is the server API for Boot service.
-// All implementations must embed UnimplementedBootServer
+// ClientServer is the server API for Client service.
+// All implementations must embed UnimplementedClientServer
 // for forward compatibility.
-type BootServer interface {
+type ClientServer interface {
 	ClientConnect(grpc.BidiStreamingServer[FromClient, FromServer]) error
-	mustEmbedUnimplementedBootServer()
+	mustEmbedUnimplementedClientServer()
 }
 
-// UnimplementedBootServer must be embedded to have
+// UnimplementedClientServer must be embedded to have
 // forward compatible implementations.
 //
 // NOTE: this should be embedded by value instead of pointer to avoid a nil
 // pointer dereference when methods are called.
-type UnimplementedBootServer struct{}
+type UnimplementedClientServer struct{}
 
-func (UnimplementedBootServer) ClientConnect(grpc.BidiStreamingServer[FromClient, FromServer]) error {
+func (UnimplementedClientServer) ClientConnect(grpc.BidiStreamingServer[FromClient, FromServer]) error {
 	return status.Errorf(codes.Unimplemented, "method ClientConnect not implemented")
 }
-func (UnimplementedBootServer) mustEmbedUnimplementedBootServer() {}
-func (UnimplementedBootServer) testEmbeddedByValue()              {}
+func (UnimplementedClientServer) mustEmbedUnimplementedClientServer() {}
+func (UnimplementedClientServer) testEmbeddedByValue()                {}
 
-// UnsafeBootServer may be embedded to opt out of forward compatibility for this service.
-// Use of this interface is not recommended, as added methods to BootServer will
+// UnsafeClientServer may be embedded to opt out of forward compatibility for this service.
+// Use of this interface is not recommended, as added methods to ClientServer will
 // result in compilation errors.
-type UnsafeBootServer interface {
-	mustEmbedUnimplementedBootServer()
+type UnsafeClientServer interface {
+	mustEmbedUnimplementedClientServer()
 }
 
-func RegisterBootServer(s grpc.ServiceRegistrar, srv BootServer) {
-	// If the following call pancis, it indicates UnimplementedBootServer was
+func RegisterClientServer(s grpc.ServiceRegistrar, srv ClientServer) {
+	// If the following call pancis, it indicates UnimplementedClientServer was
 	// embedded by pointer and is nil.  This will cause panics if an
 	// unimplemented method is ever invoked, so we test this at initialization
 	// time to prevent it from happening at runtime later due to I/O.
 	if t, ok := srv.(interface{ testEmbeddedByValue() }); ok {
 		t.testEmbeddedByValue()
 	}
-	s.RegisterService(&Boot_ServiceDesc, srv)
+	s.RegisterService(&Client_ServiceDesc, srv)
 }
 
-func _Boot_ClientConnect_Handler(srv interface{}, stream grpc.ServerStream) error {
-	return srv.(BootServer).ClientConnect(&grpc.GenericServerStream[FromClient, FromServer]{ServerStream: stream})
+func _Client_ClientConnect_Handler(srv interface{}, stream grpc.ServerStream) error {
+	return srv.(ClientServer).ClientConnect(&grpc.GenericServerStream[FromClient, FromServer]{ServerStream: stream})
 }
 
 // This type alias is provided for backwards compatibility with existing code that references the prior non-generic stream type by name.
-type Boot_ClientConnectServer = grpc.BidiStreamingServer[FromClient, FromServer]
+type Client_ClientConnectServer = grpc.BidiStreamingServer[FromClient, FromServer]
 
-// Boot_ServiceDesc is the grpc.ServiceDesc for Boot service.
+// Client_ServiceDesc is the grpc.ServiceDesc for Client service.
 // It's only intended for direct use with grpc.RegisterService,
 // and not to be introspected or modified (even as a copy)
-var Boot_ServiceDesc = grpc.ServiceDesc{
-	ServiceName: "P2P.Boot",
-	HandlerType: (*BootServer)(nil),
+var Client_ServiceDesc = grpc.ServiceDesc{
+	ServiceName: "P2P.client",
+	HandlerType: (*ClientServer)(nil),
 	Methods:     []grpc.MethodDesc{},
 	Streams: []grpc.StreamDesc{
 		{
 			StreamName:    "ClientConnect",
-			Handler:       _Boot_ClientConnect_Handler,
+			Handler:       _Client_ClientConnect_Handler,
 			ServerStreams: true,
 			ClientStreams: true,
 		},
