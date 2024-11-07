@@ -1,13 +1,16 @@
 package main
 
 import (
+	"Boot"
 	"bufio"
 	"context"
 	"fmt"
 	"log"
+	"math/rand"
 	"os"
-	"strings"
 
+	"github.com/ViktorEmil2000/CatanEnjoyers-Mandatory-activity-4/Boot"
+	p2p "github.com/ViktorEmil2000/CatanEnjoyers-Mandatory-activity-4/P2P"
 	"google.golang.org/grpc"
 	//50051
 )
@@ -17,65 +20,30 @@ func main() {
 	fmt.Println("Enter port:")
 	reader := bufio.NewReader(os.Stdin)
 	port, _ := reader.ReadString('\n')
+	userId := rand.Intn(10000000)
 
-	conn, _ := grpc.Dial("localhost:50051", grpc.WithInsecure())
-	defer conn.Close()
-
-	client := proto.NewServicesClient(conn)
+	go bootstrap(port, userId)
 
 	stream, err := client.ChatService(context.Background())
 	if err != nil {
 		log.Fatalf("Failed to call ChatService :: %v", err)
 	}
-	ch := clienthandle{
-		stream:   stream,
-		username: username,
-	}
-
-	go sendMessage(ch)
-	go receiveMessage(ch)
-
-	initialMessage := &proto.FromClient{
-		Name: ch.username,
-		Body: "Connected!",
-	}
-	ch.stream.Send(initialMessage)
 
 	bl := make(chan bool)
 	<-bl
 }
 
 type clienthandle struct {
-	stream   proto.Services_ChatServiceClient
+	stream   p2p.ClientClient
 	username string
 }
 
-func sendMessage(ch clienthandle) {
-	for {
-		reader := bufio.NewReader(os.Stdin)
+func bootstrap(port string, userId int64) {
+	conn, _ := grpc.Dial("localhost:50051", grpc.WithInsecure())
+	defer conn.Close()
 
-		clientMessage, err := reader.ReadString('\n')
-		if err != nil {
-			log.Fatalf("Failed to read from console :: %v", err)
-		}
-		clientMessage = strings.Trim(clientMessage, "\r\n")
+	BootClient := Boot.NewBootClient(conn)
 
-		clientMessageBox := &proto.FromClient{
-			Name: ch.username,
-			Body: clientMessage,
-		}
-
-		err = ch.stream.Send(clientMessageBox)
-		if err != nil {
-			log.Printf("Error while sending message to server :: %v", err)
-		}
-	}
-}
-func receiveMessage(ch clienthandle) {
-	for {
-		msg, _ := ch.stream.Recv()
-
-		fmt.Printf("%s: %s  \n", msg.Name, msg.Body)
-	}
+	stream, _ := BootClient.BootStrapConnect(context.Background())
 
 }
