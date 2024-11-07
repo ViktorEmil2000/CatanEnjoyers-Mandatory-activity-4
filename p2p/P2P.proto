@@ -1,7 +1,7 @@
 syntax = "proto3";
 package P2P;
 
-option go_package = "github.com/ViktorEmil2000/CatanEnjoyers-Mandatory-activity-4";
+option go_package = "github.com/ViktorEmil2000/CatanEnjoyers-Mandatory-activity-4/p2p";
 
 service Boot{
     rpc BootstrapConnect (stream FromClient) returns (stream FromServer){}
