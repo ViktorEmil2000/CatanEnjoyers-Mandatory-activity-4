@@ -1,0 +1,19 @@
+syntax = "proto3";
+package P2P;
+
+option go_package = "./proto";
+
+service Boot{
+    rpc BootstrapConnect (stream ClientToBoot) returns (stream BootToClient){}
+}
+
+
+message ClientToBoot {
+    string id = 1;
+    string port = 2;
+}
+
+message BootToClient {
+    string id = 1;
+    repeated string port = 2;
+}
