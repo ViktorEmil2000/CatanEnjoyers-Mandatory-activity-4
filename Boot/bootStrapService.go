@@ -12,8 +12,8 @@ type BootServerService struct {
 var mu = sync.Mutex{}
 
 type Nodes struct {
-	id     string
-	port   int64
+	id     int64
+	port   string
 	stream grpc.BidiStreamingServer[ClientToBoot, BootToClient]
 }
 
