@@ -19,7 +19,8 @@ import (
 const _ = grpc.SupportPackageIsVersion9
 
 const (
-	Client_ClientConnect_FullMethodName = "/P2P.client/ClientConnect"
+	Client_ClientConnect_FullMethodName   = "/P2P.client/ClientConnect"
+	Client_RequestResponse_FullMethodName = "/P2P.client/RequestResponse"
 )
 
 // ClientClient is the client API for Client service.
@@ -27,6 +28,7 @@ const (
 // For semantics around ctx use and closing/ending streaming RPCs, please refer to https://pkg.go.dev/google.golang.org/grpc/?tab=doc#ClientConn.NewStream.
 type ClientClient interface {
 	ClientConnect(ctx context.Context, opts ...grpc.CallOption) (grpc.BidiStreamingClient[FromClient, FromServer], error)
+	RequestResponse(ctx context.Context, in *ResquestFromClient, opts ...grpc.CallOption) (*ResponseFromServer, error)
 }
 
 type clientClient struct {
@@ -50,11 +52,22 @@ func (c *clientClient) ClientConnect(ctx context.Context, opts ...grpc.CallOptio
 // This type alias is provided for backwards compatibility with existing code that references the prior non-generic stream type by name.
 type Client_ClientConnectClient = grpc.BidiStreamingClient[FromClient, FromServer]
 
+func (c *clientClient) RequestResponse(ctx context.Context, in *ResquestFromClient, opts ...grpc.CallOption) (*ResponseFromServer, error) {
+	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
+	out := new(ResponseFromServer)
+	err := c.cc.Invoke(ctx, Client_RequestResponse_FullMethodName, in, out, cOpts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
 // ClientServer is the server API for Client service.
 // All implementations must embed UnimplementedClientServer
 // for forward compatibility.
 type ClientServer interface {
 	ClientConnect(grpc.BidiStreamingServer[FromClient, FromServer]) error
+	RequestResponse(context.Context, *ResquestFromClient) (*ResponseFromServer, error)
 	mustEmbedUnimplementedClientServer()
 }
 
@@ -67,6 +80,9 @@ type UnimplementedClientServer struct{}
 
 func (UnimplementedClientServer) ClientConnect(grpc.BidiStreamingServer[FromClient, FromServer]) error {
 	return status.Errorf(codes.Unimplemented, "method ClientConnect not implemented")
+}
+func (UnimplementedClientServer) RequestResponse(context.Context, *ResquestFromClient) (*ResponseFromServer, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method RequestResponse not implemented")
 }
 func (UnimplementedClientServer) mustEmbedUnimplementedClientServer() {}
 func (UnimplementedClientServer) testEmbeddedByValue()                {}
@@ -96,13 +112,36 @@ func _Client_ClientConnect_Handler(srv interface{}, stream grpc.ServerStream) er
 // This type alias is provided for backwards compatibility with existing code that references the prior non-generic stream type by name.
 type Client_ClientConnectServer = grpc.BidiStreamingServer[FromClient, FromServer]
 
+func _Client_RequestResponse_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(ResquestFromClient)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(ClientServer).RequestResponse(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: Client_RequestResponse_FullMethodName,
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(ClientServer).RequestResponse(ctx, req.(*ResquestFromClient))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
 // Client_ServiceDesc is the grpc.ServiceDesc for Client service.
 // It's only intended for direct use with grpc.RegisterService,
 // and not to be introspected or modified (even as a copy)
 var Client_ServiceDesc = grpc.ServiceDesc{
 	ServiceName: "P2P.client",
 	HandlerType: (*ClientServer)(nil),
-	Methods:     []grpc.MethodDesc{},
+	Methods: []grpc.MethodDesc{
+		{
+			MethodName: "RequestResponse",
+			Handler:    _Client_RequestResponse_Handler,
+		},
+	},
 	Streams: []grpc.StreamDesc{
 		{
 			StreamName:    "ClientConnect",

@@ -5,15 +5,25 @@ option go_package = "github.com/ViktorEmil2000/CatanEnjoyers-Mandatory-activity-
 
 service client{
     rpc ClientConnect (stream FromClient) returns (stream FromServer){}
+    rpc RequestResponse (ResquestFromClient) returns (responseFromServer){}
 }
 
 
 message FromClient {
-    string id = 1;
-    string requets = 2;
+
 }
 
 message FromServer {
-    int32 id = 1;
-    bool permission = 2;
+    int64 id = 1;
+    bool isResponse = 2;
+    bool response = 3;
+}
+
+message ResquestFromClient{
+    int64 id = 1;
+    bool isResponse = 2;
+    bool response = 3;
+}
+
+message responseFromServer{
 }
