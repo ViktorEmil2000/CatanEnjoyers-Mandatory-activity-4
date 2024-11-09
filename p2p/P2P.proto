@@ -1,29 +1,26 @@
 syntax = "proto3";
-package P2P;
+package p2p;
 
 option go_package = "github.com/ViktorEmil2000/CatanEnjoyers-Mandatory-activity-4/p2p";
 
-service client{
+service P2P{
     rpc ClientConnect (stream FromClient) returns (stream FromServer){}
     rpc RequestResponse (ResquestFromClient) returns (responseFromServer){}
 }
 
 
 message FromClient {
-
+    bool response = 1;
 }
 
 message FromServer {
     int64 id = 1;
-    bool isResponse = 2;
-    bool response = 3;
 }
 
 message ResquestFromClient{
     int64 id = 1;
-    bool isResponse = 2;
-    bool response = 3;
 }
 
 message responseFromServer{
+    bool response = 1;
 }

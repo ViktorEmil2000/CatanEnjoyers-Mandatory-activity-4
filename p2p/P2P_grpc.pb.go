@@ -19,29 +19,29 @@ import (
 const _ = grpc.SupportPackageIsVersion9
 
 const (
-	Client_ClientConnect_FullMethodName   = "/P2P.client/ClientConnect"
-	Client_RequestResponse_FullMethodName = "/P2P.client/RequestResponse"
+	P2P_ClientConnect_FullMethodName   = "/p2p.P2P/ClientConnect"
+	P2P_RequestResponse_FullMethodName = "/p2p.P2P/RequestResponse"
 )
 
-// ClientClient is the client API for Client service.
+// P2PClient is the client API for P2P service.
 //
 // For semantics around ctx use and closing/ending streaming RPCs, please refer to https://pkg.go.dev/google.golang.org/grpc/?tab=doc#ClientConn.NewStream.
-type ClientClient interface {
+type P2PClient interface {
 	ClientConnect(ctx context.Context, opts ...grpc.CallOption) (grpc.BidiStreamingClient[FromClient, FromServer], error)
 	RequestResponse(ctx context.Context, in *ResquestFromClient, opts ...grpc.CallOption) (*ResponseFromServer, error)
 }
 
-type clientClient struct {
+type p2PClient struct {
 	cc grpc.ClientConnInterface
 }
 
-func NewClientClient(cc grpc.ClientConnInterface) ClientClient {
-	return &clientClient{cc}
+func NewP2PClient(cc grpc.ClientConnInterface) P2PClient {
+	return &p2PClient{cc}
 }
 
-func (c *clientClient) ClientConnect(ctx context.Context, opts ...grpc.CallOption) (grpc.BidiStreamingClient[FromClient, FromServer], error) {
+func (c *p2PClient) ClientConnect(ctx context.Context, opts ...grpc.CallOption) (grpc.BidiStreamingClient[FromClient, FromServer], error) {
 	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
-	stream, err := c.cc.NewStream(ctx, &Client_ServiceDesc.Streams[0], Client_ClientConnect_FullMethodName, cOpts...)
+	stream, err := c.cc.NewStream(ctx, &P2P_ServiceDesc.Streams[0], P2P_ClientConnect_FullMethodName, cOpts...)
 	if err != nil {
 		return nil, err
 	}
@@ -50,102 +50,102 @@ func (c *clientClient) ClientConnect(ctx context.Context, opts ...grpc.CallOptio
 }
 
 // This type alias is provided for backwards compatibility with existing code that references the prior non-generic stream type by name.
-type Client_ClientConnectClient = grpc.BidiStreamingClient[FromClient, FromServer]
+type P2P_ClientConnectClient = grpc.BidiStreamingClient[FromClient, FromServer]
 
-func (c *clientClient) RequestResponse(ctx context.Context, in *ResquestFromClient, opts ...grpc.CallOption) (*ResponseFromServer, error) {
+func (c *p2PClient) RequestResponse(ctx context.Context, in *ResquestFromClient, opts ...grpc.CallOption) (*ResponseFromServer, error) {
 	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
 	out := new(ResponseFromServer)
-	err := c.cc.Invoke(ctx, Client_RequestResponse_FullMethodName, in, out, cOpts...)
+	err := c.cc.Invoke(ctx, P2P_RequestResponse_FullMethodName, in, out, cOpts...)
 	if err != nil {
 		return nil, err
 	}
 	return out, nil
 }
 
-// ClientServer is the server API for Client service.
-// All implementations must embed UnimplementedClientServer
+// P2PServer is the server API for P2P service.
+// All implementations must embed UnimplementedP2PServer
 // for forward compatibility.
-type ClientServer interface {
+type P2PServer interface {
 	ClientConnect(grpc.BidiStreamingServer[FromClient, FromServer]) error
 	RequestResponse(context.Context, *ResquestFromClient) (*ResponseFromServer, error)
-	mustEmbedUnimplementedClientServer()
+	mustEmbedUnimplementedP2PServer()
 }
 
-// UnimplementedClientServer must be embedded to have
+// UnimplementedP2PServer must be embedded to have
 // forward compatible implementations.
 //
 // NOTE: this should be embedded by value instead of pointer to avoid a nil
 // pointer dereference when methods are called.
-type UnimplementedClientServer struct{}
+type UnimplementedP2PServer struct{}
 
-func (UnimplementedClientServer) ClientConnect(grpc.BidiStreamingServer[FromClient, FromServer]) error {
+func (UnimplementedP2PServer) ClientConnect(grpc.BidiStreamingServer[FromClient, FromServer]) error {
 	return status.Errorf(codes.Unimplemented, "method ClientConnect not implemented")
 }
-func (UnimplementedClientServer) RequestResponse(context.Context, *ResquestFromClient) (*ResponseFromServer, error) {
+func (UnimplementedP2PServer) RequestResponse(context.Context, *ResquestFromClient) (*ResponseFromServer, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method RequestResponse not implemented")
 }
-func (UnimplementedClientServer) mustEmbedUnimplementedClientServer() {}
-func (UnimplementedClientServer) testEmbeddedByValue()                {}
+func (UnimplementedP2PServer) mustEmbedUnimplementedP2PServer() {}
+func (UnimplementedP2PServer) testEmbeddedByValue()             {}
 
-// UnsafeClientServer may be embedded to opt out of forward compatibility for this service.
-// Use of this interface is not recommended, as added methods to ClientServer will
+// UnsafeP2PServer may be embedded to opt out of forward compatibility for this service.
+// Use of this interface is not recommended, as added methods to P2PServer will
 // result in compilation errors.
-type UnsafeClientServer interface {
-	mustEmbedUnimplementedClientServer()
+type UnsafeP2PServer interface {
+	mustEmbedUnimplementedP2PServer()
 }
 
-func RegisterClientServer(s grpc.ServiceRegistrar, srv ClientServer) {
-	// If the following call pancis, it indicates UnimplementedClientServer was
+func RegisterP2PServer(s grpc.ServiceRegistrar, srv P2PServer) {
+	// If the following call pancis, it indicates UnimplementedP2PServer was
 	// embedded by pointer and is nil.  This will cause panics if an
 	// unimplemented method is ever invoked, so we test this at initialization
 	// time to prevent it from happening at runtime later due to I/O.
 	if t, ok := srv.(interface{ testEmbeddedByValue() }); ok {
 		t.testEmbeddedByValue()
 	}
-	s.RegisterService(&Client_ServiceDesc, srv)
+	s.RegisterService(&P2P_ServiceDesc, srv)
 }
 
-func _Client_ClientConnect_Handler(srv interface{}, stream grpc.ServerStream) error {
-	return srv.(ClientServer).ClientConnect(&grpc.GenericServerStream[FromClient, FromServer]{ServerStream: stream})
+func _P2P_ClientConnect_Handler(srv interface{}, stream grpc.ServerStream) error {
+	return srv.(P2PServer).ClientConnect(&grpc.GenericServerStream[FromClient, FromServer]{ServerStream: stream})
 }
 
 // This type alias is provided for backwards compatibility with existing code that references the prior non-generic stream type by name.
-type Client_ClientConnectServer = grpc.BidiStreamingServer[FromClient, FromServer]
+type P2P_ClientConnectServer = grpc.BidiStreamingServer[FromClient, FromServer]
 
-func _Client_RequestResponse_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+func _P2P_RequestResponse_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
 	in := new(ResquestFromClient)
 	if err := dec(in); err != nil {
 		return nil, err
 	}
 	if interceptor == nil {
-		return srv.(ClientServer).RequestResponse(ctx, in)
+		return srv.(P2PServer).RequestResponse(ctx, in)
 	}
 	info := &grpc.UnaryServerInfo{
 		Server:     srv,
-		FullMethod: Client_RequestResponse_FullMethodName,
+		FullMethod: P2P_RequestResponse_FullMethodName,
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(ClientServer).RequestResponse(ctx, req.(*ResquestFromClient))
+		return srv.(P2PServer).RequestResponse(ctx, req.(*ResquestFromClient))
 	}
 	return interceptor(ctx, in, info, handler)
 }
 
-// Client_ServiceDesc is the grpc.ServiceDesc for Client service.
+// P2P_ServiceDesc is the grpc.ServiceDesc for P2P service.
 // It's only intended for direct use with grpc.RegisterService,
 // and not to be introspected or modified (even as a copy)
-var Client_ServiceDesc = grpc.ServiceDesc{
-	ServiceName: "P2P.client",
-	HandlerType: (*ClientServer)(nil),
+var P2P_ServiceDesc = grpc.ServiceDesc{
+	ServiceName: "p2p.P2P",
+	HandlerType: (*P2PServer)(nil),
 	Methods: []grpc.MethodDesc{
 		{
 			MethodName: "RequestResponse",
-			Handler:    _Client_RequestResponse_Handler,
+			Handler:    _P2P_RequestResponse_Handler,
 		},
 	},
 	Streams: []grpc.StreamDesc{
 		{
 			StreamName:    "ClientConnect",
-			Handler:       _Client_ClientConnect_Handler,
+			Handler:       _P2P_ClientConnect_Handler,
 			ServerStreams: true,
 			ClientStreams: true,
 		},
