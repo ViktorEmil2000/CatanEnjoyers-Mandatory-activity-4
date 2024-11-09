@@ -9,19 +9,21 @@ import (
 	"net"
 	"os"
 	"sync"
+	"time"
 
 	"github.com/ViktorEmil2000/CatanEnjoyers-Mandatory-activity-4/Boot"
-	P2P "github.com/ViktorEmil2000/CatanEnjoyers-Mandatory-activity-4/p2p"
+	"github.com/ViktorEmil2000/CatanEnjoyers-Mandatory-activity-4/p2p"
 	"google.golang.org/grpc"
 )
 
 var (
-	streamToServer grpc.BidiStreamingClient[P2P.FromClient, P2P.FromServer]
+	streamToServer    grpc.BidiStreamingClient[p2p.FromClient, p2p.FromServer]
+	usingCriticalCode bool
 )
 
 type Node struct {
 	id     int64
-	client P2P.P2PClient
+	client p2p.P2PClient
 }
 
 var NodeList = []Node{}
@@ -29,7 +31,7 @@ var NodeList = []Node{}
 var nodeLock = sync.Mutex{}
 
 func main() {
-
+	usingCriticalCode = false
 	fmt.Println("Enter port:")
 	reader := bufio.NewReader(os.Stdin)
 	port, _ := reader.ReadString('\n')
@@ -37,6 +39,14 @@ func main() {
 
 	go bootstrap(port, int64(userId))
 
+	go initialize(port, userId)
+
+	bl := make(chan bool)
+
+	<-bl
+}
+
+func initialize(port string, userid int) {
 	//Create Node Server
 	PortForServer := os.Getenv("PORT")
 	if PortForServer == "" {
@@ -48,21 +58,53 @@ func main() {
 
 	grpcserver := grpc.NewServer()
 
-	cs := P2P.p2pServerService{}
-	P2P.RegisterP2PServer(grpcserver, &cs)
+	cs := p2p.P2PServerService{}
+	p2p.RegisterP2PServer(grpcserver, &cs)
+	//go initializeClient(port, userid)
 
 	grpcserver.Serve(listen)
+}
 
+func initializeClient(port string, userid int) {
 	//Create Node Client
 	conn, _ := grpc.Dial("localhost:"+port, grpc.WithInsecure())
 	defer conn.Close()
-	Client := P2P.NewP2PClient(conn)
+	Client := p2p.NewP2PClient(conn)
 	stream, _ := Client.ClientConnect(context.Background())
 	streamToServer = stream
 
-	bl := make(chan bool)
+	go nodeServer()
+	go tryonCriticalCode(userid)
+}
+func tryonCriticalCode(id int) {
+	for {
+		check := false
 
-	<-bl
+		time.Sleep(time.Duration(rand.Intn(2000)) * time.Millisecond)
+		usingCriticalCode = true
+
+		for _, element := range NodeList {
+			response, _ := element.client.RequestResponse(context.Background(), &p2p.ResquestFromClient{Id: int64(id)})
+
+			check = response.Response
+			if check == true {
+				break
+			}
+		}
+		if check == false {
+			log.Printf("This node got to run the critical code nodeID:%v", id)
+		}
+		usingCriticalCode = false
+
+	}
+}
+
+func nodeServer() {
+	for {
+		streamToServer.Recv()
+
+		streamToServer.Send(&p2p.FromClient{Response: usingCriticalCode})
+	}
 }
 
 func bootstrap(port string, userId int64) {

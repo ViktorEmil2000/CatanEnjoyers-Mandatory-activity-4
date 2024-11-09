@@ -1,4 +1,4 @@
-package P2P
+package p2p
 
 import (
 	context "context"
@@ -11,14 +11,14 @@ var (
 	streamToClient grpc.BidiStreamingServer[FromClient, FromServer]
 )
 
-type p2pServerService struct {
+type P2PServerService struct {
 }
 
-func (p2p *p2pServerService) mustEmbedUnimplementedP2PServer() {
+func (p2p *P2PServerService) mustEmbedUnimplementedP2PServer() {
 	panic("unimplemented")
 }
 
-func (p2p *p2pServerService) ClientConnect(stream grpc.BidiStreamingServer[FromClient, FromServer]) error {
+func (p2p *P2PServerService) ClientConnect(stream grpc.BidiStreamingServer[FromClient, FromServer]) error {
 	errch := make(chan error)
 
 	streamToClient = stream
@@ -28,7 +28,7 @@ func (p2p *p2pServerService) ClientConnect(stream grpc.BidiStreamingServer[FromC
 	return <-errch
 }
 
-func (p2p *p2pServerService) RequestResponse(context.Context, *ResquestFromClient) (*ResponseFromServer, error) {
+func (p2p *P2PServerService) RequestResponse(context.Context, *ResquestFromClient) (*ResponseFromServer, error) {
 	request := ResquestFromClient{}.Id
 	streamToClient.Send(&FromServer{Id: request})
 
