@@ -4,7 +4,7 @@
 // - protoc             v3.12.4
 // source: p2p/P2P.proto
 
-package p2p
+package P2P
 
 import (
 	context "context"
@@ -19,8 +19,8 @@ import (
 const _ = grpc.SupportPackageIsVersion9
 
 const (
-	P2P_ClientConnect_FullMethodName   = "/p2p.P2P/ClientConnect"
-	P2P_RequestResponse_FullMethodName = "/p2p.P2P/RequestResponse"
+	P2P_ClientConnect_FullMethodName   = "/P2P.P2P/ClientConnect"
+	P2P_RequestResponse_FullMethodName = "/P2P.P2P/RequestResponse"
 )
 
 // P2PClient is the client API for P2P service.
@@ -134,7 +134,7 @@ func _P2P_RequestResponse_Handler(srv interface{}, ctx context.Context, dec func
 // It's only intended for direct use with grpc.RegisterService,
 // and not to be introspected or modified (even as a copy)
 var P2P_ServiceDesc = grpc.ServiceDesc{
-	ServiceName: "p2p.P2P",
+	ServiceName: "P2P.P2P",
 	HandlerType: (*P2PServer)(nil),
 	Methods: []grpc.MethodDesc{
 		{

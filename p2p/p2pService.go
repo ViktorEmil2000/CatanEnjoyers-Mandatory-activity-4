@@ -1,4 +1,4 @@
-package p2p
+package P2P
 
 import (
 	context "context"

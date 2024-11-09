@@ -11,17 +11,17 @@ import (
 	"sync"
 
 	"github.com/ViktorEmil2000/CatanEnjoyers-Mandatory-activity-4/Boot"
-	"github.com/ViktorEmil2000/CatanEnjoyers-Mandatory-activity-4/p2p"
+	P2P "github.com/ViktorEmil2000/CatanEnjoyers-Mandatory-activity-4/p2p"
 	"google.golang.org/grpc"
 )
 
 var (
-	streamToServer grpc.BidiStreamingClient[p2p.FromClient, p2p.FromServer]
+	streamToServer grpc.BidiStreamingClient[P2P.FromClient, P2P.FromServer]
 )
 
 type Node struct {
 	id     int64
-	client p2p.P2PClient
+	client P2P.P2PClient
 }
 
 var NodeList = []Node{}
@@ -48,16 +48,15 @@ func main() {
 
 	grpcserver := grpc.NewServer()
 
-	P2P.p2pServerService{}
-	cs := p2p.p2pServerService{}
-	p2p.RegisterP2PServer(grpcserver, &cs)
+	cs := P2P.p2pServerService{}
+	P2P.RegisterP2PServer(grpcserver, &cs)
 
 	grpcserver.Serve(listen)
 
 	//Create Node Client
 	conn, _ := grpc.Dial("localhost:"+port, grpc.WithInsecure())
 	defer conn.Close()
-	Client := p2p.NewP2PClient(conn)
+	Client := P2P.NewP2PClient(conn)
 	stream, _ := Client.ClientConnect(context.Background())
 	streamToServer = stream
 
