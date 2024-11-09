@@ -1,4 +1,4 @@
-package Boot
+package main
 
 import (
 	"log"

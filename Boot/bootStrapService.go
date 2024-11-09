@@ -1,6 +1,7 @@
 package Boot
 
 import (
+	"log"
 	"sync"
 
 	grpc "google.golang.org/grpc"
@@ -46,6 +47,8 @@ func (BSS *BootServerService) BootstrapConnect(stream grpc.BidiStreamingServer[C
 		port:   node.Port,
 		stream: stream,
 	})
+
+	log.Printf("new node join via bootStrap ID:%v Port:%v", node.Id, node.Port)
 	mu.Unlock()
 	return <-errch
 }
