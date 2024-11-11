@@ -23,7 +23,7 @@ func (p2p *P2PServerService) ClientConnect(stream grpc.BidiStreamingServer[FromC
 
 	streamToClient = stream
 
-	log.Printf("Server sucessfully connectd @")
+	log.Printf("Server sucessfully connectd to client in node @")
 
 	return <-errch
 }
